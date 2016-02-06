@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ClientUrl</key>
+	<string>https://invis.io/PT4PSXTY6</string>
+	<key>StoryKey</key>
+	<dict>
+		<key>Top Stories</key>
+		<string>340fe1949bbc2b893c4a336bb072412a:18:74255139</string>
+		<key>TimesTags</key>
+		<string>8eadbda7bc90b5066cd7aec94f0b4ddc:6:74255139</string>
+		<key>Times Newswire</key>
+		<string>6ef2b315b02cc50b44d2f7b3ae102bbe:7:74255139</string>
+		<key>Semantic</key>
+		<string>ea0ae2eee488612ac394a952b8366860:9:74255139</string>
+		<key>Movie Reviews</key>
+		<string>b05c090ae54bc65d1921373a6717f048:14:74255139</string>
+		<key>Most Popular</key>
+		<string>001e7f19c6d0a256c82acef00b0029aa:9:74255139</string>
+		<key>Geo</key>
+		<string>b18f88f60a91226dc17e62178065e7e0:3:74255139</string>
+		<key>Congress</key>
+		<string>a3ccd79fa9a7b117c2105500bbecd4e8:5:74255139</string>
+		<key>Community</key>
+		<string>7227600a59795c72dac910e8219140a7:7:74255139</string>
+		<key>Article Search</key>
+		<string>a8457610b68381085a3fff38d6a36337:6:74255139</string>
+		<key>Books</key>
+		<string>0108552e648ca00e60e0158320a61979:15:74255139</string>
+	</dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+</dict>
+</plist>
