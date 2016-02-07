@@ -144,8 +144,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ArticleCell" owner:self options:nil];
-    ArticleCell *cell =[nib objectAtIndex:0];
+    ArticleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ArticleCell"];
+    if (cell==nil) {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ArticleCell" owner:self options:nil];
+        cell =[nib objectAtIndex:0];
+    }
     Article *temArt= [_newsArray objectAtIndex:indexPath.row];
     cell.art= temArt;
     [cell buildCell];

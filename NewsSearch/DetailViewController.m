@@ -45,8 +45,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailCell" owner:self options:nil];
-    DetailCell *cell = [nib objectAtIndex:0];
+    DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
+    if (cell==nil) {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailCell" owner:self options:nil];
+        cell =[nib objectAtIndex:0];
+    }
     cell.article=_article;
     [cell builtCell];
     self.contentHight=[NSNumber numberWithDouble:cell.paragraphLabel.frame.size.height+cell.paragraphLabel.frame.origin.y+10];
