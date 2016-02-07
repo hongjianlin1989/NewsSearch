@@ -14,8 +14,8 @@
     bool showSearchBar;
     NSString *searchHeadline;   //define what user is searching
     NSString *SelectedCategory;
-    BOOL sleep;
     double ticks;
+    NSLock *Lock;
 }
 @end
 
@@ -29,6 +29,7 @@
 - (void) setDefaulValues
 {
     [self initValues];
+    Lock= [NSLock new];
     _httpDelegate = [[HttpDelegate alloc] init];
     _httpDelegate.delegate = self;
     _keyDictionary= [[Helper sharedInstance] keyDictionary];
@@ -87,14 +88,12 @@
 
 - (void)callQueue
 {
-    if (sleep==false) {
-        if ([_searchArrayHeadline count]>0) {
-            searchHeadline= [_searchArrayHeadline objectAtIndex:0];
-            [_searchArrayHeadline removeObjectAtIndex:0];
-            [self initValues];
-            [_httpDelegate StartRequest];
-            sleep=true;
-        }
+    if ([_searchArrayHeadline count]>0) {
+        [Lock lock];
+        searchHeadline= [_searchArrayHeadline objectAtIndex:0];
+        [_searchArrayHeadline removeObjectAtIndex:0];
+        [self initValues];
+        [_httpDelegate StartRequest];
     }
 }
 
@@ -191,11 +190,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 - (void) LoadObjectCompleted:(NSMutableArray *) resultArray
 {
+    [Lock unlock];
     for (Article *art in resultArray) {
         [_newsArray addObject:art];
     }
-    sleep=false;
     [self.tableView reloadData];
+}
+
+- (void) LoadObjectFailed:(NSError *)error
+{
+    [Lock unlock];
 }
 
 #pragma mark - UIScrollDelegate

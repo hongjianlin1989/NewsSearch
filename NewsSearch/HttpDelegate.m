@@ -64,9 +64,9 @@
     [manager GET: url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject){
         NSDictionary * responseDic= responseObject;
         [self parseArticle:responseDic];
-        // sleep=false;
     } // success callback block
          failure:^(AFHTTPRequestOperation *operation, NSError *error){
+            [_delegate LoadObjectFailed:error];
              NSLog(@"Error: %@", error);} // failure callback block
      ];
 }

@@ -16,7 +16,7 @@
 
 - (NSArray *) SetsOfElementNeedForHttpDelegate;
 - (void) LoadObjectCompleted:(NSMutableArray *) resultArray;
-
+- (void) LoadObjectFailed:(NSError *) error;
 @end
 
 @interface HttpDelegate : NSObject
