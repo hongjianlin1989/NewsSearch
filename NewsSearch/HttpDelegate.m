@@ -15,6 +15,7 @@
     NSString *searchHeadline;
     NSString *currentKey;
     NSString *searchCategory;
+    NSLock *Lock;
 }
 @end
 
@@ -22,6 +23,7 @@
 
 - (void) parseArticle:(NSDictionary *) dic
 {
+    [Lock lock];
     _newsArray= [[NSMutableArray alloc] init];
     NSDictionary *response= [dic objectForKey:@"response"];
     NSArray *docs= [response objectForKey:@"docs"];
@@ -37,11 +39,15 @@
         arc.pub_date= [[Helper sharedInstance] generateDateString:[res objectForKey:@"pub_date"]];
         [_newsArray addObject:arc];
     }
+   
     [_delegate LoadObjectCompleted:_newsArray];
+    [Lock unlock];
+
 }
 
 - (void) StartRequest
 {
+    
     NSArray *resultArray= [_delegate SetsOfElementNeedForHttpDelegate];
     searchHeadline=[resultArray objectAtIndex:0];
     page=[resultArray objectAtIndex:1];
@@ -59,7 +65,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
-    NSString *url= [NSString stringWithFormat:@"http://api.nytimes.com/svc/search/v2/articlesearch.json?q=%@&page=%@&sort=oldest&api-key=%@",[[Helper sharedInstance] regenerateString:searchHeadline],page,currentKey];
+    NSString *url= [NSString stringWithFormat:@"http://api.nytimes.com/svc/search/v2/articlesearch.json?q=%@&page=%@&sort=newest&api-key=%@",[[Helper sharedInstance] regenerateString:searchHeadline],page,currentKey];
     
     [manager GET: url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject){
         NSDictionary * responseDic= responseObject;
@@ -67,8 +73,23 @@
     } // success callback block
          failure:^(AFHTTPRequestOperation *operation, NSError *error){
             [_delegate LoadObjectFailed:error];
-             NSLog(@"Error: %@", error);} // failure callback block
+            NSLog(@"Error: %@", error);} // failure callback block
      ];
 }
+
+- (id) init;{
+    
+    if ((self = [super init])) {
+         Lock= [NSLock new];
+    }
+
+    return self;
+}
+
+-(void)dealloc
+{
+    _delegate = nil;
+}
+
 
 @end

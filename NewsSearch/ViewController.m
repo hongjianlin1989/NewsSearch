@@ -12,10 +12,10 @@
 {
     NSInteger page;
     bool showSearchBar;
+    bool reflesh;
     NSString *searchHeadline;   //define what user is searching
     NSString *SelectedCategory;
     double ticks;
-    NSLock *Lock;
 }
 @end
 
@@ -29,7 +29,6 @@
 - (void) setDefaulValues
 {
     [self initValues];
-    Lock= [NSLock new];
     _httpDelegate = [[HttpDelegate alloc] init];
     _httpDelegate.delegate = self;
     _keyDictionary= [[Helper sharedInstance] keyDictionary];
@@ -77,22 +76,19 @@
 }
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField{
+    
     [textField resignFirstResponder];
-    if (![textField.text isEqualToString:@""]) {
-        [_searchArrayHeadline addObject:searchHeadline];
-        [_timer invalidate];
-        [_timerQueue invalidate];
-    }
+    [_timer invalidate];
+    [_timerQueue invalidate];
     return YES;
 }
 
 - (void)callQueue
 {
     if ([_searchArrayHeadline count]>0) {
-        [Lock lock];
         searchHeadline= [_searchArrayHeadline objectAtIndex:0];
         [_searchArrayHeadline removeObjectAtIndex:0];
-        [self initValues];
+        reflesh=true;
         [_httpDelegate StartRequest];
     }
 }
@@ -114,6 +110,28 @@
     searchHeadline= ([textField.text isEqualToString:@""])? @"New York Time" : textField.text;
 }
 
+#pragma mark - HttpDelegate
+- (NSArray *) SetsOfElementNeedForHttpDelegate
+{
+    NSString *pageString= [NSString stringWithFormat:@"%ld",(long)page];
+    NSArray *setsOfElement=[[NSArray alloc] initWithObjects:searchHeadline, pageString, _currentKey,SelectedCategory,nil];
+    return setsOfElement;
+}
+- (void) LoadObjectCompleted:(NSMutableArray *) resultArray
+{
+    if (reflesh) {
+        [self initValues];
+        reflesh=false;
+    }
+    for (Article *art in resultArray) {
+        [_newsArray addObject:art];
+    }
+    [self.tableView reloadData];
+}
+
+- (void) LoadObjectFailed:(NSError *)error
+{
+}
 
 
 #pragma mark - UITableViewDelegate
@@ -181,26 +199,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [_httpDelegate StartRequest];
 }
 
-#pragma mark - HttpDelegate
-- (NSArray *) SetsOfElementNeedForHttpDelegate
-{
-    NSString *pageString= [NSString stringWithFormat:@"%ld",(long)page];
-    NSArray *setsOfElement=[[NSArray alloc] initWithObjects:searchHeadline, pageString, _currentKey,SelectedCategory,nil];
-    return setsOfElement;
-}
-- (void) LoadObjectCompleted:(NSMutableArray *) resultArray
-{
-    [Lock unlock];
-    for (Article *art in resultArray) {
-        [_newsArray addObject:art];
-    }
-    [self.tableView reloadData];
-}
-
-- (void) LoadObjectFailed:(NSError *)error
-{
-    [Lock unlock];
-}
 
 #pragma mark - UIScrollDelegate
 
