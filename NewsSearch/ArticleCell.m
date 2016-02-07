@@ -22,7 +22,6 @@
 {
     _headLineLabel.text=_art.headline;
     _dayLabel.text=_art.pub_date;
-    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

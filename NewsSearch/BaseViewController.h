@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AsyncImageView.h"
 #import "Helper.h"
 #import "Article.h"
 @interface BaseViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
