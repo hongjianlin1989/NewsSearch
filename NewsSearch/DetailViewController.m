@@ -16,7 +16,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     // Do any additional setup after loading the view.
 }
 
@@ -46,19 +45,11 @@
 -(UITableViewCell *)defineTableView:(UITableView *)tableView
               cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    DetailCell *cell =(DetailCell *) [tableView cellForRowAtIndexPath:indexPath];
-    if (indexPath.row==0) {
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailCell" owner:self options:nil];
-            cell = [nib objectAtIndex:0];
-            cell.article=_article;
-            [cell builtCell];
-            self.contentHight=[NSNumber numberWithDouble:cell.paragraphLabel.frame.size.height+cell.paragraphLabel.frame.origin.y+10];
-        }
-    }
-    
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailCell" owner:self options:nil];
+    DetailCell *cell = [nib objectAtIndex:0];
+    cell.article=_article;
+    [cell builtCell];
+    self.contentHight=[NSNumber numberWithDouble:cell.paragraphLabel.frame.size.height+cell.paragraphLabel.frame.origin.y+10];
     return cell;
 }
 
@@ -66,14 +57,5 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

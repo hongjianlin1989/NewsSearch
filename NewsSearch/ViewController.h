@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
-#import "Article.h"
 #import "ArticleCell.h"
 #import "DetailViewController.h"
 #import "UITableView+reloadData.h"
-@interface ViewController : BaseViewController<UITextFieldDelegate>
+#import "HttpDelegate.h"
+@interface ViewController : BaseViewController<UITextFieldDelegate,HttpDelegate>
 
 @property (strong, nonatomic) NSMutableArray *newsArray;
 @property (strong, nonatomic) NSDictionary *keyDictionary;
@@ -22,6 +22,8 @@
 @property (strong, nonatomic) NSMutableArray * searchArrayHeadline;
 @property (strong, nonatomic) NSTimer *timer;
 @property (strong, nonatomic) NSTimer *timerQueue;
+
+@property (strong, nonatomic) HttpDelegate *httpDelegate;
 
 @end
 

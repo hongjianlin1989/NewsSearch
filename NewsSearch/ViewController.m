@@ -13,6 +13,7 @@
     NSInteger page;
     bool showSearchBar;
     NSString *searchHeadline;   //define what user is searching
+    NSString *SelectedCategory;
     BOOL sleep;
     double ticks;
 }
@@ -27,24 +28,26 @@
 
 - (void) setDefaulValues
 {
+    [self initValues];
+    _httpDelegate = [[HttpDelegate alloc] init];
+    _httpDelegate.delegate = self;
     _keyDictionary= [[Helper sharedInstance] keyDictionary];
     showSearchBar=false;
     searchHeadline=@"New York Times";
-    [self getSelectedCategory:@"Article Search"];
+    SelectedCategory=@"Article Search";
+    [self getSelectedCategory:SelectedCategory];
     _searchArrayHeadline=[[NSMutableArray alloc] init];
     
     _textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 7, 300, 35)];
     _textField.frame= [[Helper sharedInstance] resizeFrameWithFrame:_textField];
-    [_textField addTarget:self
-                   action:@selector(textFieldDidChange:)
-         forControlEvents:UIControlEventEditingChanged];
+    [_textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     _textField.backgroundColor= [UIColor whiteColor];
     [_textField setBorderStyle:UITextBorderStyleNone];
     _textField.layer.cornerRadius=3;
     _textField.placeholder=@"Search Headlines";
+    _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     _textField.delegate=self;
-    
-    [self initValues];
+
 }
 
 - (void) initValues
@@ -53,53 +56,13 @@
     page=1;
 }
 
-
-- (void) parseArticle:(NSDictionary *) dic
-{
-    NSDictionary *response= [dic objectForKey:@"response"];
-    NSArray *docs= [response objectForKey:@"docs"];
-    for (NSDictionary *res in docs) {
-        Article *arc= [[Article alloc] init];
-        arc._id= [res objectForKey:@"_id"];
-        NSDictionary * headline= [res objectForKey:@"headline"];
-        arc.headline= [headline objectForKey:@"main"];
-        arc.lead_paragraph= [res objectForKey:@"lead_paragraph"];
-        arc.snippet= [res objectForKey:@"snippet"];
-        arc.web_url= [res objectForKey:@"web_url"];
-        arc.source= [res objectForKey:@"source"];
-        arc.pub_date= [[Helper sharedInstance] generateDateString:[res objectForKey:@"pub_date"]];
-        
-        [_newsArray addObject:arc];
-    }
-    [self.tableView reloadData];
-}
-
-- (void) getNewsFromUrl:(NSString *)key
-{
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    
-    NSString *url= [NSString stringWithFormat:@"http://api.nytimes.com/svc/search/v2/articlesearch.json?q=%@&page=%li&sort=oldest&api-key=%@",[[Helper sharedInstance] regenerateString:searchHeadline],page,key];
-    
-    [manager GET: url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject){
-        NSDictionary * responseDic= responseObject;
-        [self parseArticle:responseDic];
-        sleep=false;
-    } // success callback block
-         failure:^(AFHTTPRequestOperation *operation, NSError *error){
-             NSLog(@"Error: %@", error);} // failure callback block
-     ];
-    
-}
-
 - (void) viewWillDisappear:(BOOL)animated
 {
     [_timerQueue invalidate];
     [_timer invalidate];
 }
 
-#pragma mark - text field delegate
+#pragma mark - textfield delegate
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch * touch = [touches anyObject];
     if(touch.phase == UITouchPhaseBegan) {
@@ -129,7 +92,7 @@
             searchHeadline= [_searchArrayHeadline objectAtIndex:0];
             [_searchArrayHeadline removeObjectAtIndex:0];
             [self initValues];
-            [self getNewsFromUrl:_currentKey];
+            [_httpDelegate StartRequest];
             sleep=true;
         }
     }
@@ -165,13 +128,11 @@
               cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ArticleCell" owner:self options:nil];
-    
     ArticleCell *cell =[nib objectAtIndex:0];
     Article *temArt= [_newsArray objectAtIndex:indexPath.row];
     cell.art= temArt;
     [cell buildCell];
     self.contentHight=[NSNumber numberWithInteger:85*SCREEN_WIDTH_RATIO];
-    
     return cell;
 }
 
@@ -201,7 +162,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UIView *searchView=[[UIView alloc] initWithFrame:CGRectMake(0, 50*SCREEN_WIDTH_RATIO, 320*SCREEN_WIDTH_RATIO, 55*SCREEN_WIDTH_RATIO)];
     searchView.backgroundColor= UA_rgba(29, 97, 139, 1);
-    
     [searchView addSubview:_textField];
     [view addSubview:searchView];
 }
@@ -219,24 +179,38 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void) getSelectedCategory:(NSString *) keyName
 {
     _currentKey= [_keyDictionary objectForKey:keyName];
-    [self getNewsFromUrl:_currentKey];
+    [_httpDelegate StartRequest];
+}
+
+#pragma mark - HttpDelegate
+- (NSArray *) SetsOfElementNeedForHttpDelegate
+{
+    NSString *pageString= [NSString stringWithFormat:@"%ld",(long)page];
+    NSArray *setsOfElement=[[NSArray alloc] initWithObjects:searchHeadline, pageString, _currentKey,SelectedCategory,nil];
+    return setsOfElement;
+}
+- (void) LoadObjectCompleted:(NSMutableArray *) resultArray
+{
+    for (Article *art in resultArray) {
+        [_newsArray addObject:art];
+    }
+    sleep=false;
+    [self.tableView reloadData];
 }
 
 #pragma mark - UIScrollDelegate
 
 - (void)scrollViewDidScroll: (UIScrollView*)scroll {
-    
     if(self.tableView.contentOffset.y >= (self.tableView.contentSize.height - self.tableView.bounds.size.height-300)) {
         if (_count==0) {
             page++;
-            [self getNewsFromUrl:_currentKey];
+            [_httpDelegate StartRequest];
         }
         _count++;
     }else
     {
         _count=0;
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {

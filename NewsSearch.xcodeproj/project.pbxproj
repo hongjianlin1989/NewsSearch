@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		27150EF91C6644C7008B29F5 /* UITableView+reloadData.m in Sources */ = {isa = PBXBuildFile; fileRef = 27150EF81C6644C7008B29F5 /* UITableView+reloadData.m */; };
+		27150F031C66A3F5008B29F5 /* HttpDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 27150F021C66A3F5008B29F5 /* HttpDelegate.m */; };
 		27ACF59E1C63AC65002C0221 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 27ACF59D1C63AC65002C0221 /* main.m */; };
 		27ACF5A11C63AC65002C0221 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 27ACF5A01C63AC65002C0221 /* AppDelegate.m */; };
 		27ACF5A41C63AC65002C0221 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27ACF5A31C63AC65002C0221 /* ViewController.m */; };
@@ -48,6 +49,8 @@
 /* Begin PBXFileReference section */
 		27150EF71C6644C7008B29F5 /* UITableView+reloadData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+reloadData.h"; sourceTree = "<group>"; };
 		27150EF81C6644C7008B29F5 /* UITableView+reloadData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+reloadData.m"; sourceTree = "<group>"; };
+		27150F011C66A3F5008B29F5 /* HttpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpDelegate.h; sourceTree = "<group>"; };
+		27150F021C66A3F5008B29F5 /* HttpDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpDelegate.m; sourceTree = "<group>"; };
 		27ACF5991C63AC65002C0221 /* NewsSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27ACF59D1C63AC65002C0221 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		27ACF59F1C63AC65002C0221 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -164,6 +167,8 @@
 				27ACF5A01C63AC65002C0221 /* AppDelegate.m */,
 				27ACF5D21C63AD74002C0221 /* Helper.h */,
 				27ACF5D31C63AD74002C0221 /* Helper.m */,
+				27150F011C66A3F5008B29F5 /* HttpDelegate.h */,
+				27150F021C66A3F5008B29F5 /* HttpDelegate.m */,
 				27ACF5A21C63AC65002C0221 /* ViewController.h */,
 				27ACF5A31C63AC65002C0221 /* ViewController.m */,
 				27C240621C65522D00190820 /* DetailViewController.h */,
@@ -422,6 +427,7 @@
 				27ACF5D11C63AD15002C0221 /* BaseViewController.m in Sources */,
 				27ACF5DD1C63C2EB002C0221 /* Article.m in Sources */,
 				27ACF5A11C63AC65002C0221 /* AppDelegate.m in Sources */,
+				27150F031C66A3F5008B29F5 /* HttpDelegate.m in Sources */,
 				27C240641C65522D00190820 /* DetailViewController.m in Sources */,
 				27C2405F1C65148E00190820 /* ArticleCell.m in Sources */,
 				27ACF59E1C63AC65002C0221 /* main.m in Sources */,
