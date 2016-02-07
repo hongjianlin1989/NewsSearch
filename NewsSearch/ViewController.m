@@ -135,14 +135,14 @@
 
 
 #pragma mark - UITableViewDelegate
-
-- (NSInteger) defineTableNumberRowsSection
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section
 {
     return [_newsArray count];
 }
 
--(UITableViewCell *)defineTableView:(UITableView *)tableView
-              cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ArticleCell" owner:self options:nil];
     ArticleCell *cell =[nib objectAtIndex:0];
@@ -183,7 +183,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [view addSubview:searchView];
 }
 
-- (CGFloat) defineTableHeaderHeight
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return (showSearchBar==false) ? 45.0f*SCREEN_WIDTH_RATIO : 100*SCREEN_WIDTH_RATIO;
 }

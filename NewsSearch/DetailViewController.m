@@ -42,8 +42,8 @@
 
 }
 
--(UITableViewCell *)defineTableView:(UITableView *)tableView
-              cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailCell" owner:self options:nil];
     DetailCell *cell = [nib objectAtIndex:0];

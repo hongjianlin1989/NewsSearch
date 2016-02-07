@@ -34,37 +34,16 @@
     // Do any additional setup after loading the view.
 }
 
-- (CGFloat) defineTableHeaderHeight
-{
-    return 45.0f*SCREEN_WIDTH_RATIO;
-}
-
-- (CGFloat) defineTableContentHeight
-{
-    return self.contentHight.integerValue;
-}
-
 - (void) customizeHeaderView:(UILabel *)titleLabel withView:(UIView *)view
 {
 }
 
-- (NSInteger) defineTableNumberRowsSection
-{
-    return 1;
-}
-
--(UITableViewCell *)defineTableView:(UITableView *)tableView
-              cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell= [[UITableViewCell alloc] init];
-    return cell;
-}
 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self defineTableHeaderHeight];
+      return 45.0f*SCREEN_WIDTH_RATIO;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -87,7 +66,6 @@
     nameLabel.text=@"Today's Headlines";
     nameLabel.textAlignment=NSTextAlignmentCenter;
     [self customizeHeaderView:nameLabel withView:view];
-    
     [view addSubview:nameLabel];
     
     return  view;
@@ -101,13 +79,14 @@
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return [self defineTableNumberRowsSection];
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self defineTableView:tableView cellForRowAtIndexPath:indexPath];
+    UITableViewCell *cell= [[UITableViewCell alloc] init];
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView
@@ -117,7 +96,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    return [self defineTableContentHeight];
+     return self.contentHight.integerValue;
 }
 
 
