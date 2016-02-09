@@ -13,7 +13,7 @@
     NSInteger page;
     bool showSearchBar;
     bool reflesh;
-    NSString *searchHeadline;   //define what user is searching
+    NSString *EnteredSearchHeadline;   //define what user is searching
     NSString *SelectedCategory;
     double ticks;
 }
@@ -33,7 +33,7 @@
     _httpDelegate.delegate = self;
     _keyDictionary= [[Helper sharedInstance] keyDictionary];
     showSearchBar=false;
-    searchHeadline=@"New York Times";
+    EnteredSearchHeadline=@"New York Times";
     SelectedCategory=@"Article Search";
     [self getSelectedCategory:SelectedCategory];
     _searchArrayHeadline=[[NSMutableArray alloc] init];
@@ -86,7 +86,7 @@
 - (void)callQueue
 {
     if ([_searchArrayHeadline count]>0) {
-        searchHeadline= [_searchArrayHeadline objectAtIndex:0];
+        EnteredSearchHeadline= [_searchArrayHeadline objectAtIndex:0];
         [_searchArrayHeadline removeObjectAtIndex:0];
         reflesh=true;
         [_httpDelegate StartRequest];
@@ -98,7 +98,7 @@
     ticks += 0.1;
     double seconds = fmod(ticks, 60.0);
     if (seconds>=0.5 && seconds<0.6) {
-        [_searchArrayHeadline addObject:searchHeadline];
+        [_searchArrayHeadline addObject:EnteredSearchHeadline];
     }
 }
 
@@ -107,14 +107,14 @@
     [_timer invalidate];
     ticks=0;
     _timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
-    searchHeadline= ([textField.text isEqualToString:@""])? @"New York Time" : textField.text;
+    EnteredSearchHeadline= ([textField.text isEqualToString:@""])? @"New York Time" : textField.text;
 }
 
 #pragma mark - HttpDelegate
 - (NSArray *) SetsOfElementNeedForHttpDelegate
 {
     NSString *pageString= [NSString stringWithFormat:@"%ld",(long)page];
-    NSArray *setsOfElement=[[NSArray alloc] initWithObjects:searchHeadline, pageString, _currentKey,SelectedCategory,nil];
+    NSArray *setsOfElement=[[NSArray alloc] initWithObjects:EnteredSearchHeadline, pageString, _currentKey,SelectedCategory,nil];
     return setsOfElement;
 }
 - (void) LoadObjectCompleted:(NSMutableArray *) resultArray
