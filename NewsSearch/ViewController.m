@@ -13,8 +13,8 @@
     NSInteger page;
     bool showSearchBar;
     bool reflesh;
-    NSString *EnteredSearchHeadline;   //define what user is searching
-    NSString *SelectedCategory;
+    NSString *inputSearchTerm;   //define what user is searching
+    NSString *selectedCategory;
     double ticks;
 }
 @end
@@ -33,26 +33,26 @@
     _httpDelegate.delegate = self;
     _keyDictionary= [[Helper sharedInstance] keyDictionary];
     showSearchBar=false;
-    EnteredSearchHeadline=@"New York Times";
-    SelectedCategory=@"Article Search";
-    [self getSelectedCategory:SelectedCategory];
-    _searchArrayHeadline=[[NSMutableArray alloc] init];
+    inputSearchTerm=@"New York Times";
+    selectedCategory=@"Article Search";
+    [self getSelectedCategory:selectedCategory];
+    _inputSearchTermArray=[[NSMutableArray alloc] init];
     
-    _textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 7, 300, 35)];
-    _textField.frame= [[Helper sharedInstance] resizeFrameWithFrame:_textField];
-    [_textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    _textField.backgroundColor= [UIColor whiteColor];
-    [_textField setBorderStyle:UITextBorderStyleNone];
-    _textField.layer.cornerRadius=3;
-    _textField.placeholder=@"Search Headlines";
-    _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _textField.delegate=self;
+    _searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 7, 300, 35)];
+    _searchTextField.frame= [[Helper sharedInstance] resizeFrameWithFrame:_searchTextField];
+    [_searchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    _searchTextField.backgroundColor= [UIColor whiteColor];
+    [_searchTextField setBorderStyle:UITextBorderStyleNone];
+    _searchTextField.layer.cornerRadius=3;
+    _searchTextField.placeholder=@"Search Headlines";
+    _searchTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _searchTextField.delegate=self;
 
 }
 
 - (void) initValues
 {
-    _newsArray= [[NSMutableArray alloc] init];
+    _articleArray= [[NSMutableArray alloc] init];
     page=1;
 }
 
@@ -66,7 +66,7 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch * touch = [touches anyObject];
     if(touch.phase == UITouchPhaseBegan) {
-        [_textField resignFirstResponder];
+        [_searchTextField resignFirstResponder];
     }
 }
 
@@ -85,9 +85,9 @@
 
 - (void)callQueue
 {
-    if ([_searchArrayHeadline count]>0) {
-        EnteredSearchHeadline= [_searchArrayHeadline objectAtIndex:0];
-        [_searchArrayHeadline removeObjectAtIndex:0];
+    if ([_inputSearchTermArray count]>0) {
+        inputSearchTerm= [_inputSearchTermArray objectAtIndex:0];
+        [_inputSearchTermArray removeObjectAtIndex:0];
         reflesh=true;
         [_httpDelegate StartRequest];
     }
@@ -98,7 +98,7 @@
     ticks += 0.1;
     double seconds = fmod(ticks, 60.0);
     if (seconds>=0.5 && seconds<0.6) {
-        [_searchArrayHeadline addObject:EnteredSearchHeadline];
+        [_inputSearchTermArray addObject:inputSearchTerm];
     }
 }
 
@@ -107,14 +107,14 @@
     [_timer invalidate];
     ticks=0;
     _timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
-    EnteredSearchHeadline= ([textField.text isEqualToString:@""])? @"New York Time" : textField.text;
+    inputSearchTerm= ([textField.text isEqualToString:@""])? @"New York Time" : textField.text;
 }
 
 #pragma mark - HttpDelegate
 - (NSArray *) SetsOfElementNeedForHttpDelegate
 {
     NSString *pageString= [NSString stringWithFormat:@"%ld",(long)page];
-    NSArray *setsOfElement=[[NSArray alloc] initWithObjects:EnteredSearchHeadline, pageString, _currentKey,SelectedCategory,nil];
+    NSArray *setsOfElement=[[NSArray alloc] initWithObjects:inputSearchTerm, pageString, _currentKey,selectedCategory,nil];
     return setsOfElement;
 }
 - (void) LoadObjectCompleted:(NSMutableArray *) resultArray
@@ -124,7 +124,7 @@
         reflesh=false;
     }
     for (Article *art in resultArray) {
-        [_newsArray addObject:art];
+        [_articleArray addObject:art];
     }
     [self.tableView reloadData];
 }
@@ -138,7 +138,7 @@
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return [_newsArray count];
+    return [_articleArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -149,7 +149,7 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ArticleCell" owner:self options:nil];
         cell =[nib objectAtIndex:0];
     }
-    Article *temArt= [_newsArray objectAtIndex:indexPath.row];
+    Article *temArt= [_articleArray objectAtIndex:indexPath.row];
     cell.art= temArt;
     [cell buildCell];
     self.contentHight=[NSNumber numberWithInteger:85*SCREEN_WIDTH_RATIO];
@@ -161,7 +161,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     DetailViewController *detailView = [mainStoryboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
-    detailView.article=[_newsArray objectAtIndex:indexPath.row];
+    detailView.article=[_articleArray objectAtIndex:indexPath.row];
     [self presentViewController:detailView animated:YES completion:nil];
     
 }
@@ -182,7 +182,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UIView *searchView=[[UIView alloc] initWithFrame:CGRectMake(0, 50*SCREEN_WIDTH_RATIO, 320*SCREEN_WIDTH_RATIO, 55*SCREEN_WIDTH_RATIO)];
     searchView.backgroundColor= UA_rgba(29, 97, 139, 1);
-    [searchView addSubview:_textField];
+    [searchView addSubview:_searchTextField];
     [view addSubview:searchView];
 }
 

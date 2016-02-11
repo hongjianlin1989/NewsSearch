@@ -14,12 +14,12 @@
 #import "HttpDelegate.h"
 @interface ViewController : BaseViewController<UITextFieldDelegate,HttpDelegate>
 
-@property (strong, nonatomic) NSMutableArray *newsArray;
+@property (strong, nonatomic) NSMutableArray *articleArray;
 @property (strong, nonatomic) NSDictionary *keyDictionary;
 @property (assign, nonatomic) int count;
 @property (assign, nonatomic) NSString *currentKey;
-@property (strong, nonatomic) UITextField *textField;
-@property (strong, nonatomic) NSMutableArray * searchArrayHeadline;
+@property (strong, nonatomic) UITextField *searchTextField;
+@property (strong, nonatomic) NSMutableArray * inputSearchTermArray;
 @property (strong, nonatomic) NSTimer *timer;
 @property (strong, nonatomic) NSTimer *timerQueue;
 

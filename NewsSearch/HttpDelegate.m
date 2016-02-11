@@ -12,7 +12,7 @@
 @interface HttpDelegate ()
 {
     NSString *page;
-    NSString *searchHeadline;
+    NSString *searchTerm;
     NSString *currentKey;
     NSString *searchCategory;
     NSLock *Lock;
@@ -49,7 +49,7 @@
 {
     
     NSArray *resultArray= [_delegate SetsOfElementNeedForHttpDelegate];
-    searchHeadline=[resultArray objectAtIndex:0];
+    searchTerm=[resultArray objectAtIndex:0];
     page=[resultArray objectAtIndex:1];
     currentKey=[resultArray objectAtIndex:2];
     searchCategory=[resultArray objectAtIndex:3];
@@ -65,7 +65,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
-    NSString *url= [NSString stringWithFormat:@"http://api.nytimes.com/svc/search/v2/articlesearch.json?q=%@&page=%@&sort=newest&api-key=%@",[[Helper sharedInstance] regenerateString:searchHeadline],page,currentKey];
+    NSString *url= [NSString stringWithFormat:@"http://api.nytimes.com/svc/search/v2/articlesearch.json?q=%@&page=%@&sort=newest&api-key=%@",[[Helper sharedInstance] regenerateString:searchTerm],page,currentKey];
     
     [manager GET: url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject){
         NSDictionary * responseDic= responseObject;
