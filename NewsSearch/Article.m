@@ -10,7 +10,7 @@
 
 @implementation Article
 
-- (NSString *)getSnippet
+- (NSString *)snippet
 {
     return ([_snippet isEqual:[NSNull null]]) ? @"" : _snippet;
 }

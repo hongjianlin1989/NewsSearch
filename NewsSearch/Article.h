@@ -18,5 +18,5 @@
 @property (nonatomic, retain) NSString * source;
 @property (nonatomic, retain) NSString * pub_date;
 
-- (NSString *)getSnippet;
+
 @end

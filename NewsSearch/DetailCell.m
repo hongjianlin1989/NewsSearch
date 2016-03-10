@@ -18,7 +18,7 @@
     _nameLabel.text=_article.source;
     _timeLabel.text=_article.pub_date;
     _headlineLabel.text=_article.headline;
-    _paragraphLabel.text=_article.getSnippet;
+    _paragraphLabel.text=_article.snippet;
     [self.contentView layoutIfNeeded];
 }
 
