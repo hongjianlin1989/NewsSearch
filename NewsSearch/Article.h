@@ -10,13 +10,13 @@
 
 @interface Article : NSObject
 
-@property (nonatomic, retain) NSString * _id;
-@property (nonatomic, retain) NSString * headline;
-@property (nonatomic, retain) NSString * lead_paragraph;
-@property (nonatomic, retain) NSString * snippet;
-@property (nonatomic, retain) NSString * web_url;
-@property (nonatomic, retain) NSString * source;
-@property (nonatomic, retain) NSString * pub_date;
+@property (nonatomic, strong) NSString * _id;
+@property (nonatomic, strong) NSString * headline;
+@property (nonatomic, strong) NSString * lead_paragraph;
+@property (nonatomic, strong) NSString * snippet;
+@property (nonatomic, strong) NSString * web_url;
+@property (nonatomic, strong) NSString * source;
+@property (nonatomic, strong) NSString * pub_date;
 
 
 @end
